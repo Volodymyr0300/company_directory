@@ -53,6 +53,17 @@ fn main() {
         } else {
             println!("Unknown command. Use: Add / List / List All / Quit");
         }
+
+        if command.eq_ignore_ascii_case("add") {
+            match parse_add_command(&tokens) {
+                Some((name, department)) => {
+                    println!("Parse: name '{}', department='{}'", name, department);
+                }
+                None => {
+                    println!("Invalid Add command. Use: Add <name> to <department>");   
+                }
+            }
+        }
     }
 }
 
