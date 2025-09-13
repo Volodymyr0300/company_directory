@@ -1,6 +1,26 @@
 use std::collections::HashMap;
 use std::io;
 
+fn parse_add_command(tokens: &Vec<&str>) -> Option<(String, String)> {
+    let mut to_index: Option<usize> = None;
+    for i in 1..tokens.len() {
+        if tokens[i].eq_ignore_ascii_case("to") {
+            to_index = Some(i);
+            break;
+        }
+    }
+
+    if let Some(i) = to_index {
+        if i > 2 && i + 1 < tokens.len() {
+            let name = tokens[1..i].join("");
+            let department = tokens[i + 1..].join(" ");
+            return Some((name, department));
+        }
+    }
+    None
+}
+
+
 fn main() {
     let mut company: HashMap<String, Vec<String>> = HashMap::new();
     println!("{:?}", company);
