@@ -19,5 +19,22 @@ fn main() {
         }
 
         println!("You typed: {}", input);
+
+        let tokens: Vec<&str> = input.split_whitespace().collect();
+
+        if tokens.is_empty() {continue;}
+
+        let command = tokens[0];
+
+        if command.eq_ignore_ascii_case("add") {
+            println!("(will handle Add...)");
+        } else if command.eq_ignore_ascii_case("list") {
+            println!("(will handle List...)");
+        } else {
+            println!("Unknown command. Use: Add / List / List All / Quit");
+        }
     }
 }
+
+
+
