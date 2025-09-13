@@ -20,6 +20,26 @@ fn parse_add_command(tokens: &Vec<&str>) -> Option<(String, String)> {
     None
 }
 
+fn add_employee(company: &mut HashMap<String, Vec<String>>, name: String, department: String) {
+    let entry = company.entry(department).or_insert(Vec::new());
+    entry.push(name);
+}
+
+fn list_department(company: &HashMap<String, Vec<String>>, department: &str) {
+    match company.get(department) {
+        Some(employees) => {
+            let mut names = employees.clone();
+            names.sort();
+            println!("Department '{}':", department);
+            for name in names {
+                println!("- {}", name);
+            }
+        }
+        None => {
+            println!("No such department: {}", department);
+        }
+    }
+}
 
 fn main() {
     let mut company: HashMap<String, Vec<String>> = HashMap::new();
@@ -61,6 +81,28 @@ fn main() {
                 }
                 None => {
                     println!("Invalid Add command. Use: Add <name> to <department>");   
+                }
+            }
+        } else if command.eq_ignore_ascii_case("list") {
+            if tokens.len() >= 2 && tokens[1].eq_ignore_ascii_case("all") && tokens.len() == 2 {
+                //
+            } else if tokens.len() >= 2 {
+                let department = tokens[1..].join(" ");
+                list_department(&company, &department);
+            } else {
+                println!("Invalid List command. Use: List <department> or List All");
+            }
+            
+        }
+
+        if command.eq_ignore_ascii_case("add") {
+            match parse_add_command(&tokens) {
+                Some((name, department)) => {
+                    add_employee(&mut company,name.clone(), department.clone());
+                    println!("Added '{}' to '{}'.", name, department);
+                }
+                None => {
+                    println!("Invalid Add command. Use: Add <name> to <department>");
                 }
             }
         }
