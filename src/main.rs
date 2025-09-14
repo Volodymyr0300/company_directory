@@ -41,6 +41,28 @@ fn list_department(company: &HashMap<String, Vec<String>>, department: &str) {
     }
 }
 
+fn list_all(company: &HashMap<String, Vec<String>>) {
+    if company.is_empty() {
+        println!("No departments / employees found.");
+        return;
+    }
+
+    let mut departments: Vec<&String> = company.keys().collect();
+    departments.sort();
+
+    for dept in departments {
+        println!("{}", dept);
+
+        if let Some(employees) = company.get(dept) {
+            let mut names = employees.clone();
+            names.sort();
+            for name in names {
+                println!("- {}", name);
+            }
+        }
+    }
+}
+
 fn main() {
     let mut company: HashMap<String, Vec<String>> = HashMap::new();
     println!("{:?}", company);
@@ -85,7 +107,7 @@ fn main() {
             }
         } else if command.eq_ignore_ascii_case("list") {
             if tokens.len() >= 2 && tokens[1].eq_ignore_ascii_case("all") && tokens.len() == 2 {
-                //
+                list_all(&company);
             } else if tokens.len() >= 2 {
                 let department = tokens[1..].join(" ");
                 list_department(&company, &department);
